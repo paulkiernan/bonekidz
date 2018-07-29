@@ -44,8 +44,8 @@
 #                                                        " `$  `$ $' `
 #
 # make all = Make software.
-# make clean = Clean out built project files.
-# make upload = Upload the hex file to the device
+# make clean = Clean out previously built project files
+# make upload = Upload the hex file to the target device
 
 # Valid targets == LC,36
 TEENSY = 36
@@ -56,21 +56,16 @@ TOOLSPATH = $(CURDIR)/tools
 COMPILERPATH = $(TOOLSPATH)/arm/bin
 BUILDDIR = $(abspath $(CURDIR)/build)
 COMPILER_OPTIMIZATION = Os  # Embedded systems love space
-
-#TEENSY_CORE_SPEED = 180000000
-TEENSY_CORE_SPEED = 48000000
-
 OPTIONS = -DUSB_SERIAL -DLAYOUT_US_ENGLISH
 
 # CPPFLAGS = compiler options for C and C++ preprocessor
 CPPFLAGS = \
+	-$(COMPILER_OPTIMIZATION) \
 	-DARDUINO=10805 \
-	-DF_CPU=$(TEENSY_CORE_SPEED) \
-	-DTEENSYDUINO=141 \
+	-DTEENSYDUINO=142 \
 	-I$(COREPATH) \
 	-Isrc \
 	-MMD \
-	-$(COMPILER_OPTIMIZATION) \
 	-Wall \
 	-fdata-sections \
 	-ffunction-sections \
@@ -128,12 +123,12 @@ SOURCES := \
 OBJS := $(foreach src,$(SOURCES), $(BUILDDIR)/$(src))
 
 ifeq ($(TEENSY), 36)
-    CPPFLAGS += -D__MK66FX1M0__ -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16
+    CPPFLAGS += -D__MK66FX1M0__ -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -DF_CPU=180000000
     LDSCRIPT = $(COREPATH)/mk66fx1m0.ld
     LDFLAGS += -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -T$(LDSCRIPT)
     LIBS += -larm_cortexM4lf_math
 else ifeq ($(TEENSY), LC)
-    CPPFLAGS += -D__MKL26Z64__ -mcpu=cortex-m0plus
+    CPPFLAGS += -D__MKL26Z64__ -mcpu=cortex-m0plus -DF_CPU=48000000
     LDSCRIPT = $(COREPATH)/mkl26z64.ld
     LDFLAGS += -mcpu=cortex-m0plus -T$(LDSCRIPT)
     LIBS += -larm_cortexM0l_math

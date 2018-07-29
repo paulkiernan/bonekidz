@@ -10,7 +10,7 @@
 
 IntervalTimer heartbeatTimer;
 int ledState = LOW;
-volatile unsigned long blinkCount = 0; // use volatile for shared variables
+volatile unsigned long blinkCount = 0;
 
 
 void heartbeatLED() {
@@ -25,21 +25,15 @@ void heartbeatLED() {
 
 
 extern "C" int main(void) {
-
     delay(1000);
     CLogging::Init();
-    //CLogging::log(
-        //" ___.   .__       .__   _______________  ________  "
-        //" \_ |__ |__|__  __|__| /   __   \   _  \/   __   \\"
-        //"  | __ \|  \  \/  /  | \____    /  /_\  \____    / "
-        //"  | \_\ \  |>    <|  |    /    /\  \_/   \ /    /  "
-        //"  |___  /__/__/\_ \__|   /____/  \_____  //____/   "
-        //"      \/         \/                    \/          "
-    //);
     pinMode(HEARTBEAT_PIN, OUTPUT);
-    heartbeatTimer.begin(heartbeatLED, 150000);  // blinkLED to run every 0.15 seconds
+    heartbeatTimer.begin(heartbeatLED, 150000);  // heartbeatLED to run every 0.15 seconds
 
+    // Main Program Loop
     while (!CBonez::Instance().ShuttingDown()) {
         CBonez::Instance().Continue();
     }
+
+    CLogging::log("Shutting Down");
 }

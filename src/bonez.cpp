@@ -4,12 +4,12 @@
 #include "logging.h"
 
 // Defines
-#define BRIGHTNESS     140
+#define BRIGHTNESS     120
 #define CHIPSET        WS2811
 #define COLOR_ORDER    GRB
 #define LED_PIN        3
-#define kMatrixWidth   144
-#define kMatrixHeight  1
+#define kMatrixWidth   12
+#define kMatrixHeight  12
 #define NUM_LEDS (kMatrixWidth * kMatrixHeight)
 
 // Global variables
