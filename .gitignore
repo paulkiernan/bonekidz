@@ -1,0 +1,4 @@
+.DS_Store
+build/
+bonez.elf
+bonez.hex
